@@ -1,3 +1,10 @@
+#JSK add
+venv/
+.venv/
+ENV/
+env/
+
+
 # Virtual Environment
 .venv/
 */.venv/

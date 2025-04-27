@@ -14,7 +14,8 @@ class Retriever:
             self.embed_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
             
             # Construct the path to the CSV file. Adjust the relative path if needed.
-            data_path = os.path.join(os.path.dirname(__file__), '../data/embeddings.csv')
+            #data_path = os.path.join(os.path.dirname(__file__), '../data/embeddings.csv')
+            data_path = os.path.join(os.path.dirname(__file__), 'data/embeddings.csv')
             self.knowledge_df = pd.read_csv(data_path)
             
             # Convert string representations of embeddings into numpy arrays.

@@ -6,6 +6,9 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
+###Added JSK start
+from pydantic import BaseModel
+###Added JSK end
 
 from model import Model
 from potts import IntentClassifier
@@ -27,21 +30,45 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+###Added JSK start
+class QueryInput(BaseModel):
+    query: str
+    context: dict = {}
+###Added JSK end    
 
 @app.post("/query")
-async def process_query(request: Request):
-    
-    data = await request.json()
-    query = data.get("query") or data.get("msg")
-    user_context = data.get("context", {}).get("user_profile", {})
-    
-    if not query:
-        return JSONResponse({"error": "No query provided"}, status_code=400)
+#async def process_query(request: Request):
+#    
+#    data = await request.json()
+#    query = data.get("query") or data.get("msg")
+#    user_context = data.get("context", {}).get("user_profile", {})
+#    
+#    if not query:
+#        return JSONResponse({"error": "No query provided"}, status_code=400)
+#
+#    logger.info(f"Received query: {query}")
+#    logger.info(f"User context: {user_context}")
+#
+#    # Pass all user context to the model.
+#    response = model.get_response(query, user_context=user_context)
+#
+#    return JSONResponse({
+#        "reasoning": response["reasoning"],
+#        "final_answer": response["final_answer"],
+#        "detected_intent": response["detected_intent"],
+#        "context_used": response.get("context_used", ""),
+#        "raw_content": response.get("raw_content", "")
+#    })
+
+###Added JSK start
+@app.post("/query")
+async def process_query(input: QueryInput):
+    query = input.query
+    user_context = input.context.get("user_profile", {})
 
     logger.info(f"Received query: {query}")
     logger.info(f"User context: {user_context}")
 
-    # Pass all user context to the model.
     response = model.get_response(query, user_context=user_context)
 
     return JSONResponse({
@@ -51,6 +78,15 @@ async def process_query(request: Request):
         "context_used": response.get("context_used", ""),
         "raw_content": response.get("raw_content", "")
     })
+###Added JSK end
+
+
+async def process_query(query_input: QueryInput):
+    query = query_input.query
+    context = query_input.context
+    
+    
+    
 
 @app.get("/health")
 async def health_check():

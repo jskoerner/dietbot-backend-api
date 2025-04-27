@@ -11,12 +11,16 @@ For the backend:
 ```bash
 cd backend
 python -m venv .venv
+#JSK   python3 -m venv venv
 source venv/bin/activate
+#JSK source venv/bin/activate
 pip install -r requirements.txt
 ```
 To run the backend:
 ```bash
 uvicorn main:app --reload --port
+#  uvicorn main:app --reload --port 8000
+
 ```
 
 To index your PDF documents in the data folder:

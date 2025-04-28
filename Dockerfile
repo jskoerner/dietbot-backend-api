@@ -20,11 +20,18 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Pre-download the sentence-transformers model
 #RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
 # Switch to appuser to download model into app-owned cache
-USER appuser
+#USER appuser
+#RUN mkdir -p /app/model_cache && \
+#    HF_HOME=/app/model_cache python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
+#USER root
+#ENV HF_HOME=/app/model_cache
+# Create cache dir as root, give it to appuser, download model, then switch to appuser
 RUN mkdir -p /app/model_cache && \
+    chown -R appuser:appuser /app/model_cache && \
     HF_HOME=/app/model_cache python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
-USER root
+
 ENV HF_HOME=/app/model_cache
+USER appuser
 
 
 # 4 . Copy the rest of the source code

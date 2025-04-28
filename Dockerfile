@@ -13,10 +13,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 3.5 needed Pre-download the sentence-transformers model so it’s cached in the image
-RUN python - <<'PY'
-from sentence_transformers import SentenceTransformer
-SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-PY
+#RUN python - <<'PY'
+#from sentence_transformers import SentenceTransformer
+#SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+#PY
+# Pre-download the sentence-transformers model
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
 
 
 # 4 . Copy the rest of the source code

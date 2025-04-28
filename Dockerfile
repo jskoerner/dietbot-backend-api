@@ -2,8 +2,12 @@
 FROM python:3.11-slim
 
 # 1 . Optional OS-level build tools
-RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
+    
 # 2 . Create non-root user & set workdir
 RUN useradd -m appuser
 WORKDIR /app
